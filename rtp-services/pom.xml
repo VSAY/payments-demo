@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>sidgs.rtp.example</groupId>
+    <artifactId>rtp-parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>creditor-aml-check</module>
+        <module>creditor-incoming-payments</module>
+        <module> creditor-payment-acknowledgement</module>
+        <module> creditor-payment-validation</module>
+        <module> creditor-payments-confirmation</module>
+        <module> debtor-aml-check</module>
+        <module> debtor-core-banking</module>
+        <module> debtor-format-validation</module>
+        <module> debtor-fraud-check</module>
+        <module> debtor-message-generation</module>
+        <module> debtor-payments-confirmation</module>
+        <module> debtor-payments-lifecycle</module>
+        <module> debtor-payments-service</module>
+        <module> debtor-send-payment</module>
+        <module> domain-model</module>
+        <module> message-model</module>
+        <module> mock-rtp-network</module>
+        <module> payments-repository</module>    
+    </modules>
+</project>
