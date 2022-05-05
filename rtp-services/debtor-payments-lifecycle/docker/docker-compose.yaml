@@ -1,0 +1,10 @@
+
+version: '2'
+
+services:
+  @project.artifactId@:
+    build: ./
+    image: @docker.registry@/@project.artifactId@:@project.version@
+    ports:
+      - 8080:8080
+

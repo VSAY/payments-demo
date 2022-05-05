@@ -1,91 +1,5 @@
 # FSI Real Time Payments Demo
 
-## CodeReady Containers
-
-To deploy on a local environment, download CodeReady Containers and download or copy your pull secret. Follow the instructions to install on your local environment:
-https://developers.redhat.com/download-manager/link/3868678
-
-https://access.redhat.com/documentation/en-us/red_hat_codeready_containers/1.17/html-single/getting_started_guide/index#setting-up-codeready-containers_gsg
-
-
-After downloading the tar file, untar and add crc to the path:
-```
-$ tar -xf crc-macos-amd64.tar.xz
-$ export PATH=$PATH:/path/to/crc-macos-1.17.0-amd64/
-$ crc -h
-```
-
-Setup crc, provide the root/admin password for your local environment when prompted:
-```
-$ crc setup
-INFO Checking if oc binary is cached              
-INFO Caching oc binary                            
-INFO Checking if podman remote binary is cached   
-INFO Checking if goodhosts binary is cached       
-INFO Caching goodhosts binary                     
-INFO Will use root access: change ownership of /Users/liz/.crc/bin/goodhosts
-Password:
-INFO Will use root access: set suid for /Users/liz/.crc/bin/goodhosts
-INFO Checking if CRC bundle is cached in '$HOME/.crc'
-INFO Unpacking bundle from the CRC binary         
-INFO Checking minimum RAM requirements            
-INFO Checking if running as non-root              
-INFO Checking if HyperKit is installed            
-INFO Setting up virtualization with HyperKit      
-INFO Will use root access: change ownership of /Users/liz/.crc/bin/hyperkit
-INFO Will use root access: set suid for /Users/liz/.crc/bin/hyperkit
-INFO Checking if crc-driver-hyperkit is installed
-INFO Installing crc-machine-hyperkit              
-INFO Will use root access: change ownership of /Users/liz/.crc/bin/crc-driver-hyperkit
-INFO Will use root access: set suid for /Users/liz/.crc/bin/crc-driver-hyperkit
-INFO Checking file permissions for /etc/hosts     
-INFO Checking file permissions for /etc/resolver/testing
-INFO Setting file permissions for /etc/resolver/testing
-INFO Will use root access: create dir /etc/resolver
-INFO Will use root access: create file /etc/resolver/testing
-INFO Will use root access: change ownership of /etc/resolver/testing
-Setup is complete, you can now run 'crc start' to start the OpenShift cluster
-```
-
-Run 'crc start' and paste your pull secret when prompted:
-```
-$ crc start
-INFO Checking if oc binary is cached              
-INFO Checking if podman remote binary is cached   
-INFO Checking if goodhosts binary is cached       
-INFO Checking minimum RAM requirements            
-INFO Checking if running as non-root              
-INFO Checking if HyperKit is installed            
-INFO Checking if crc-driver-hyperkit is installed
-INFO Checking file permissions for /etc/hosts     
-INFO Checking file permissions for /etc/resolver/testing
-? Image pull secret [? for help] *********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
-INFO Extracting bundle: crc_hyperkit_4.5.14.crcbundle ... crc.qcow2: 9.97 GiB / 9.97 GiB [---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------] 100.00%
-INFO Checking size of the disk image /Users/liz/.crc/cache/crc_hyperkit_4.5.14/crc.qcow2 ...
-INFO Creating CodeReady Containers VM for OpenShift 4.5.14...
-INFO CodeReady Containers VM is running           
-INFO Generating new SSH Key pair ...              
-INFO Copying kubeconfig file to instance dir ...  
-INFO Starting network time synchronization in CodeReady Containers VM
-INFO Verifying validity of the cluster certificates ...
-INFO Restarting the host network                  
-INFO Check internal and public DNS query ...      
-INFO Check DNS query from host ...                
-INFO Starting OpenShift kubelet service           
-INFO Configuring cluster for first start          
-INFO Adding user's pull secret ...                
-INFO Updating cluster ID ...                      
-INFO Starting OpenShift cluster ... [waiting 3m]  
-INFO Updating kubeconfig                          
-WARN The cluster might report a degraded or error state. This is expected since several operators have been disabled to lower the resource usage. For more information, please consult the documentation
-Started the OpenShift cluster
-```
-
-The OpenShift cluster admin and developer credentials will be printed. You can also view your credentials using:
-```
-$ crc console --credentials
-```
-
 
 ## Manual Installation
 
@@ -93,107 +7,79 @@ $ crc console --credentials
 
 Clone or download this git repository to a local working space. The below instructions assume git, maven and oc are installed. Commands below are run against a local clone or download of this git repository.
 
-### OpenShift Project Setup
+###  Project Setup
 
-Logged in as a user logged in to OpenShift with cluster-admin permissions, create a new namespace for the demo project:
+Logged in as a user logged in to K8 with cluster-admin permissions, create a new namespace for the demo project:
 ```
-oc new-project rtp-demo
+kubectl create ns rtp-demo
 ```
 
 ### AMQ Streams
 
 As a user with cluster admin permissions, install the AMQ Streams operator:
 ```
-$ oc apply -f amq-streams/install/cluster-operator -n rtp-demo
-serviceaccount/strimzi-cluster-operator created
-clusterrole.rbac.authorization.k8s.io/strimzi-cluster-operator-namespaced created
-rolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator created
-clusterrole.rbac.authorization.k8s.io/strimzi-cluster-operator-global created
-clusterrolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator created
-clusterrole.rbac.authorization.k8s.io/strimzi-kafka-broker created
-clusterrolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator-kafka-broker-delegation created
-clusterrole.rbac.authorization.k8s.io/strimzi-entity-operator created
-rolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator-entity-operator-delegation created
-clusterrole.rbac.authorization.k8s.io/strimzi-topic-operator created
-rolebinding.rbac.authorization.k8s.io/strimzi-cluster-operator-topic-operator-delegation created
-customresourcedefinition.apiextensions.k8s.io/kafkas.kafka.strimzi.io created
-customresourcedefinition.apiextensions.k8s.io/kafkaconnects.kafka.strimzi.io created
-customresourcedefinition.apiextensions.k8s.io/kafkaconnects2is.kafka.strimzi.io created
-customresourcedefinition.apiextensions.k8s.io/kafkatopics.kafka.strimzi.io created
-customresourcedefinition.apiextensions.k8s.io/kafkausers.kafka.strimzi.io created
-customresourcedefinition.apiextensions.k8s.io/kafkamirrormakers.kafka.strimzi.io created
-customresourcedefinition.apiextensions.k8s.io/kafkabridges.kafka.strimzi.io created
-deployment.apps/strimzi-cluster-operator created
+
+kubectl create -f 'https://strimzi.io/install/latest?namespace=rtp-demo' -n rtp-demo
+
 ```
 
 Confirm that the AMQ Streams cluster operator is running:
 ```
-$ oc get pods -n rtp-demo
+kubectl get pods -n rtp-demo
+
+```
+Look For 
+
+```
 NAME                                        READY     STATUS    RESTARTS   AGE
 strimzi-cluster-operator-55bcc5cf9d-5kbct   1/1       Running   0          61s
 ```
 
 Install an ephemeral kafka cluster:
 ```
-$ oc apply -f amq-streams/install/cluster/kafka-ephemeral.yaml -n rtp-demo
+
+kubectl apply -f amq-streams/install/cluster/kafka-ephemeral.yaml -n rtp-demo
+
+
+```
+Look for 
+
+```
 kafka.kafka.strimzi.io/rtp-demo-cluster created
 ```
 
 Confirm all AMQ Streams resources successfully created and running:
 ```
-$ oc get all -n rtp-demo
-NAME                                                    READY     STATUS    RESTARTS   AGE
-pod/rtp-demo-cluster-entity-operator-5cf5cffc6b-vs5g4   3/3       Running   0          2m34s
-pod/rtp-demo-cluster-kafka-0                            2/2       Running   1          3m41s
-pod/rtp-demo-cluster-kafka-1                            2/2       Running   0          3m41s
-pod/rtp-demo-cluster-kafka-2                            2/2       Running   0          3m41s
-pod/rtp-demo-cluster-zookeeper-0                        2/2       Running   0          5m6s
-pod/rtp-demo-cluster-zookeeper-1                        2/2       Running   0          5m6s
-pod/rtp-demo-cluster-zookeeper-2                        2/2       Running   0          5m6s
-pod/strimzi-cluster-operator-55bcc5cf9d-5kbct           1/1       Running   0          16m
 
-NAME                                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
-service/rtp-demo-cluster-kafka-bootstrap    ClusterIP   172.25.85.166   <none>        9091/TCP,9092/TCP,9093/TCP   3m42s
-service/rtp-demo-cluster-kafka-brokers      ClusterIP   None            <none>        9091/TCP,9092/TCP,9093/TCP   3m42s
-service/rtp-demo-cluster-zookeeper-client   ClusterIP   172.25.130.61   <none>        2181/TCP                     5m7s
-service/rtp-demo-cluster-zookeeper-nodes    ClusterIP   None            <none>        2181/TCP,2888/TCP,3888/TCP   5m7s
+kubectl get all -n rtp-demo
 
-NAME                                               READY     UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/rtp-demo-cluster-entity-operator   1/1       1            1           2m34s
-deployment.apps/strimzi-cluster-operator           1/1       1            1           16m
-
-NAME                                                          DESIRED   CURRENT   READY     AGE
-replicaset.apps/rtp-demo-cluster-entity-operator-5cf5cffc6b   1         1         1         2m34s
-replicaset.apps/strimzi-cluster-operator-55bcc5cf9d           1         1         1         16m
-
-NAME                                          READY     AGE
-statefulset.apps/rtp-demo-cluster-kafka       3/3       3m41s
-statefulset.apps/rtp-demo-cluster-zookeeper   3/3       5m6s
 ```
 
 ### MySQL
 
-Check that you are in the rtp-demo project:
-```
-oc project rtp-demo
-```
+
 
 Create the MySQl application:
+
+
+
 ```
-oc new-app \
-    -e MYSQL_USER=dbuser \
-    -e MYSQL_PASSWORD=dbpass \
-    -e MYSQL_DATABASE=rtpdb \
-    --name=mysql-56-rhel7 \
-    registry.access.redhat.com/rhscl/mysql-56-rhel7
+kubectl apply -f mysql-db -n rtp-demo
+
 ```
 
 Once the MySQL pod is running, log into the rtpdb database using the username/password as set up (dbuser/dbpass) and then apply the DDL located in payments-repository/src/main/resources/DDL and the DML located in payments-repository/src/main/resources/DML.
+
 ```
-$ oc get pods -n rtp-demo | grep mysql
-mysql-56-rhel7-1-deploy                            0/1       Completed   0          24m
-mysql-56-rhel7-1-zf5bk                             1/1       Running     0          24m
-$ 
+kubectl get pods -n rtp-demo | grep mysql
+
+```
+
+Validate the connection with the DB 
+
+
+```
+
 $ oc exec -it mysql-56-rhel7-1-zf5bk bash
 bash-4.2$ 
 bash-4.2$ mysql --host localhost -P 3306 --protocol tcp -u dbuser -D rtpdb -pdbpass

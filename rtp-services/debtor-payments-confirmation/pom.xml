@@ -7,6 +7,12 @@
     <groupId>org.example</groupId>
     <artifactId>debtor-payments-confirmation</artifactId>
     <version>1.0.0</version>
+    <parent>
+        <groupId>sidgs.rtp.example</groupId>
+        <artifactId>rtp-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../</relativePath>
+      </parent>
 
     <name>Fabric8 :: Quickstarts :: Spring-Boot :: Camel</name>
     <description>Spring Boot example running a Camel route</description>
