@@ -1,0 +1,1029 @@
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debtor-format-validation-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: debtor-format-validation
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: debtor-incoming-payments
+    PRODUCER_TOPIC: debtor-format-validation-output
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debtor-aml-check-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: debtor-aml-check
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: debtor-format-validation-output
+    PRODUCER_TOPIC: debtor-aml-check-output
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debtor-fraud-check-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: debtor-fraud-check
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: debtor-format-validation-output
+    PRODUCER_TOPIC: debtor-fraud-check-output
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debtor-core-banking-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: debtor-core-banking
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: debtor-fraud-check-output
+    CONSUMER_TOPIC_2: debtor-aml-check-output
+    PRODUCER_TOPIC: debtor-core-banking-output
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debtor-send-payment-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: debtor-send-payment
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: debtor-core-banking-output
+    PRODUCER_TOPIC: mock-rtp-incoming
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mock-rtp-network-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: mock-rtp-network
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: mock-rtp-incoming
+    PRODUCER_TOPIC: mock-rtp-debtor-confirmation
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debtor-payments-lifecycle-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: debtor-payments-lifecycle
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    DATABASE_PASS: dbpass
+    DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true
+    DATABASE_USER: dbuser
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: creditor-incoming-payments-network-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: creditor-incoming-payments
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: mock-rtp-creditor-incoming
+    PRODUCER_TOPIC: creditor-incoming-payments
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: creditor-payment-validation-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: creditor-payment-validation
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: creditor-incoming-payments
+    PRODUCER_TOPIC: creditor-payment-validation-output
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: creditor-aml-check-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: creditor-aml-check
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: creditor-payment-validation-output
+    PRODUCER_TOPIC: creditor-aml-check-output
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: creditor-payment-acknowledgement-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: creditor-payment-acknowledgement
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: creditor-aml-check-output
+    PRODUCER_TOPIC: mock-rtp-creditor-acknowledgement
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debtor-payments-confirmation-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: debtor-payments-confirmation
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: mock-rtp-debtor-confirmation
+    PRODUCER_TOPIC: debtor-payments-confirmation-output
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: creditor-payments-confirmation-config-map
+data:
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    CONSUMER_COUNT: "1"
+    CONSUMER_GROUP: creditor-payments-confirmation
+    CONSUMER_MAX_POLL_RECORDS: "500"
+    CONSUMER_SEEK_TO: end
+    CONSUMER_TOPIC: mock-rtp-creditor-confirmation
+    PRODUCER_TOPIC: mock-rtp-incoming
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: debtor-format-validation-service
+  labels:
+    app-name: debtor-format-validation-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: debtor-format-validation-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: debtor-aml-check-service
+  labels:
+    app-name: debtor-aml-check-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: debtor-aml-check-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: debtor-fraud-check-service
+  labels:
+    app-name: debtor-fraud-check-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: debtor-fraud-check-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: debtor-core-banking-service
+  labels:
+    app-name: debtor-core-banking-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: debtor-core-banking-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: debtor-send-payment-service
+  labels:
+    app-name: debtor-send-payment-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: debtor-send-payment-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mock-rtp-network-service
+  labels:
+    app-name: mock-rtp-network-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: mock-rtp-network-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: debtor-payments-lifecycle-service
+  labels:
+    app-name: debtor-payments-lifecycle-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: debtor-payments-lifecycle-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: creditor-incoming-payments-network-service
+  labels:
+    app-name: creditor-incoming-payments-network-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: creditor-incoming-payments-network-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: creditor-payment-validation-service
+  labels:
+    app-name: creditor-payment-validation-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: creditor-payment-validation-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: creditor-aml-check-service
+  labels:
+    app-name: creditor-aml-check-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: creditor-aml-check-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: creditor-payment-acknowledgement-service
+  labels:
+    app-name: creditor-payment-acknowledgement-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: creditor-payment-acknowledgement-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: debtor-payments-confirmation-service
+  labels:
+    app-name: debtor-payments-confirmation-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: debtor-payments-confirmation-deployment
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: creditor-payments-confirmation-service
+  labels:
+    app-name: creditor-payments-confirmation-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: creditor-payments-confirmation-deployment
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debtor-format-validation-deployment
+  labels:
+    app-name: debtor-format-validation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: debtor-format-validation
+  template:
+    metadata:
+      labels:
+        app-name: debtor-format-validation
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: debtor-format-validation
+          securityContext:
+            {}
+          image: sidgs001/debtor-format-validation:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: debtor-format-validation-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debtor-aml-check-deployment
+  labels:
+    app-name: debtor-aml-check
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: debtor-aml-check
+  template:
+    metadata:
+      labels:
+        app-name: debtor-aml-check
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: debtor-aml-check
+          securityContext:
+            {}
+          image: sidgs001/debtor-aml-check:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: debtor-aml-check-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debtor-fraud-check-deployment
+  labels:
+    app-name: debtor-fraud-check
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: debtor-fraud-check
+  template:
+    metadata:
+      labels:
+        app-name: debtor-fraud-check
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: debtor-fraud-check
+          securityContext:
+            {}
+          image: sidgs001/debtor-fraud-check:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: debtor-fraud-check-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debtor-core-banking-deployment
+  labels:
+    app-name: debtor-core-banking
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: debtor-core-banking
+  template:
+    metadata:
+      labels:
+        app-name: debtor-core-banking
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: debtor-core-banking
+          securityContext:
+            {}
+          image: sidgs001/debtor-core-banking:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: debtor-core-banking-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debtor-send-payment-deployment
+  labels:
+    app-name: debtor-send-payment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: debtor-send-payment
+  template:
+    metadata:
+      labels:
+        app-name: debtor-send-payment
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: debtor-send-payment
+          securityContext:
+            {}
+          image: sidgs001/debtor-send-payment:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: debtor-send-payment-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mock-rtp-network-deployment
+  labels:
+    app-name: mock-rtp-network
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: mock-rtp-network
+  template:
+    metadata:
+      labels:
+        app-name: mock-rtp-network
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: mock-rtp-network
+          securityContext:
+            {}
+          image: sidgs001/mock-rtp-network:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: mock-rtp-network-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debtor-payments-lifecycle-deployment
+  labels:
+    app-name: debtor-payments-lifecycle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: debtor-payments-lifecycle
+  template:
+    metadata:
+      labels:
+        app-name: debtor-payments-lifecycle
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: debtor-payments-lifecycle
+          securityContext:
+            {}
+          image: sidgs001/debtor-payments-lifecycle:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: debtor-payments-lifecycle-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: creditor-incoming-payments-network-deployment
+  labels:
+    app-name: creditor-incoming-payments-network
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: creditor-incoming-payments-network
+  template:
+    metadata:
+      labels:
+        app-name: creditor-incoming-payments-network
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: creditor-incoming-payments-network
+          securityContext:
+            {}
+          image: sidgs001/creditor-incoming-payments-network:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: creditor-incoming-payments-network-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: creditor-payment-validation-deployment
+  labels:
+    app-name: creditor-payment-validation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: creditor-payment-validation
+  template:
+    metadata:
+      labels:
+        app-name: creditor-payment-validation
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: creditor-payment-validation
+          securityContext:
+            {}
+          image: sidgs001/creditor-payment-validation:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: creditor-payment-validation-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: creditor-aml-check-deployment
+  labels:
+    app-name: creditor-aml-check
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: creditor-aml-check
+  template:
+    metadata:
+      labels:
+        app-name: creditor-aml-check
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: creditor-aml-check
+          securityContext:
+            {}
+          image: sidgs001/creditor-aml-check:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: creditor-aml-check-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: creditor-payment-acknowledgement-deployment
+  labels:
+    app-name: creditor-payment-acknowledgement
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: creditor-payment-acknowledgement
+  template:
+    metadata:
+      labels:
+        app-name: creditor-payment-acknowledgement
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: creditor-payment-acknowledgement
+          securityContext:
+            {}
+          image: sidgs001/creditor-payment-acknowledgement:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: creditor-payment-acknowledgement-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debtor-payments-confirmation-deployment
+  labels:
+    app-name: debtor-payments-confirmation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: debtor-payments-confirmation
+  template:
+    metadata:
+      labels:
+        app-name: debtor-payments-confirmation
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: debtor-payments-confirmation
+          securityContext:
+            {}
+          image: sidgs001/debtor-payments-confirmation:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: debtor-payments-confirmation-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: creditor-payments-confirmation-deployment
+  labels:
+    app-name: creditor-payments-confirmation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: creditor-payments-confirmation
+  template:
+    metadata:
+      labels:
+        app-name: creditor-payments-confirmation
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: creditor-payments-confirmation
+          securityContext:
+            {}
+          image: sidgs001/creditor-payments-confirmation:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: creditor-payments-confirmation-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi

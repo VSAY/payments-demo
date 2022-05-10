@@ -1,0 +1,212 @@
+# Default values for rtp-helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: 
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 200m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+rtp_services: 
+  - name : debtor-format-validation 
+    image: sidgs001/debtor-format-validation:1.0.0
+    port: 8080
+    properties: 
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+      CONSUMER_TOPIC: debtor-incoming-payments
+      PRODUCER_TOPIC: debtor-format-validation-output
+      CONSUMER_MAX_POLL_RECORDS: "500"
+      CONSUMER_COUNT: "1"
+      CONSUMER_SEEK_TO: end
+      CONSUMER_GROUP: debtor-format-validation
+  - name: debtor-aml-check
+    image: sidgs001/debtor-aml-check:1.0.0
+    properties: 
+      BOOTSTRAP_SERVERS: "rtp-demo-cluster-kafka-bootstrap:9092" 
+      CONSUMER_TOPIC: debtor-format-validation-output 
+      PRODUCER_TOPIC: debtor-aml-check-output 
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: debtor-aml-check
+
+  - name: debtor-fraud-check
+    properties: 
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
+      CONSUMER_TOPIC: debtor-format-validation-output 
+      PRODUCER_TOPIC: debtor-fraud-check-output 
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: debtor-fraud-check
+
+  - name: debtor-core-banking
+    properties: 
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+      CONSUMER_TOPIC: debtor-fraud-check-output
+      CONSUMER_TOPIC_2: debtor-aml-check-output
+      PRODUCER_TOPIC: debtor-core-banking-output
+      CONSUMER_MAX_POLL_RECORDS: "500"
+      CONSUMER_COUNT: "1"
+      CONSUMER_SEEK_TO: end
+      CONSUMER_GROUP: debtor-core-banking
+
+  - name: debtor-send-payment
+    properties:  
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
+      CONSUMER_TOPIC: debtor-core-banking-output 
+      PRODUCER_TOPIC: mock-rtp-incoming 
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: debtor-send-payment
+
+  - name: mock-rtp-network
+    properties:   
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+      CONSUMER_TOPIC: mock-rtp-incoming 
+      PRODUCER_TOPIC: mock-rtp-debtor-confirmation 
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: mock-rtp-network
+
+  - name: debtor-payments-lifecycle
+    properties:  
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: debtor-payments-lifecycle 
+      DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true
+      DATABASE_USER: dbuser 
+      DATABASE_PASS: dbpass
+
+  - name: creditor-incoming-payments-network
+    properties:  
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
+      CONSUMER_TOPIC: mock-rtp-creditor-incoming 
+      PRODUCER_TOPIC: creditor-incoming-payments 
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: creditor-incoming-payments
+
+  - name: creditor-payment-validation
+    properties: 
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+      CONSUMER_TOPIC: creditor-incoming-payments 
+      PRODUCER_TOPIC: creditor-payment-validation-output 
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: creditor-payment-validation
+
+  - name: creditor-aml-check
+    properties: 
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
+      CONSUMER_TOPIC: creditor-payment-validation-output 
+      PRODUCER_TOPIC: creditor-aml-check-output 
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: creditor-aml-check
+
+  - name: creditor-payment-acknowledgement
+    properties: 
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+      CONSUMER_TOPIC: creditor-aml-check-output 
+      PRODUCER_TOPIC: mock-rtp-creditor-acknowledgement
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end
+      CONSUMER_GROUP: creditor-payment-acknowledgement
+  - name: debtor-payments-confirmation
+    properties:  
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+      CONSUMER_TOPIC: mock-rtp-debtor-confirmation 
+      PRODUCER_TOPIC: debtor-payments-confirmation-output 
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: debtor-payments-confirmation
+  - name: creditor-payments-confirmation
+    properties:  
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+      CONSUMER_TOPIC: mock-rtp-creditor-confirmation 
+      PRODUCER_TOPIC: mock-rtp-incoming 
+      CONSUMER_MAX_POLL_RECORDS: "500" 
+      CONSUMER_COUNT: "1" 
+      CONSUMER_SEEK_TO: end 
+      CONSUMER_GROUP: creditor-payments-confirmation

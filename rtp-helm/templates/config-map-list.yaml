@@ -1,0 +1,11 @@
+{{- range .Values.rtp_services }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .name }}-config-map
+data:
+  {{- toYaml .properties | nindent 4 }}
+
+---
+
+{{- end }}
