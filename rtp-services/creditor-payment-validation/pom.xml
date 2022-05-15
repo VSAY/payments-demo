@@ -15,8 +15,6 @@
     <artifactId>creditor-payment-validation</artifactId>
     <version>1.0.0</version>
 
-    <name>Fabric8 :: Quickstarts :: Spring-Boot :: Camel</name>
-    <description>Spring Boot example running a Camel route</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
