@@ -1,13 +1,6 @@
 package rtp.demo.payment.repository;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 import rtp.demo.domain.payment.Payment;
 
@@ -50,8 +43,8 @@ public class PaymentRepositoryTest {
 //		assertEquals(0, payments.size());
 //	}
 
-	private Payment makeTestPayment() {
-		Payment testPayment = new Payment();
+//	private Payment makeTestPayment() {
+//		Payment testPayment = new Payment();
 //		testPayment.setPaymentId("PAY123");
 //		testPayment.setDebtorAccountNumber("123456789");
 //
@@ -75,7 +68,7 @@ public class PaymentRepositoryTest {
 //		testPayment.setDebtorAgentFinancialInstitutionId("1111111111");
 //		testPayment.setCreditorAgentFinancialInstitutionId("2222222222");
 
-		return testPayment;
-	}
+//		return testPayment;
+//	}
 
 }
