@@ -58,6 +58,12 @@
 
 
    	<dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-hateoas</artifactId>
+        </dependency>
+
             <dependency>
                 <groupId>org.example</groupId>
                 <artifactId>domain-model</artifactId>

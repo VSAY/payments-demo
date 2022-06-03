@@ -52,6 +52,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-hateoas</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>dev.snowdrop</groupId>
       <artifactId>vertx-spring-boot-starter-http</artifactId>
     </dependency>
