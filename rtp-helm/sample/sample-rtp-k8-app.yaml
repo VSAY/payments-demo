@@ -97,13 +97,13 @@ data:
     CONSUMER_SEEK_TO: end
     DATABASE_PASS: dbpass
     DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true
-    DATABASE_USER: dbuser
+    DATABASE_USER: root
 ---
 # Source: rtp-helm/templates/config-map-list.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: creditor-incoming-payments-network-config-map
+  name: creditor-incoming-payments-config-map
 data:
     BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
     CONSUMER_COUNT: "1"
@@ -306,9 +306,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: creditor-incoming-payments-network-service
+  name: creditor-incoming-payments-service
   labels:
-    app-name: creditor-incoming-payments-network-deployment 
+    app-name: creditor-incoming-payments-deployment 
 spec:
   type: ClusterIP
   ports:
@@ -317,7 +317,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: creditor-incoming-payments-network-deployment
+    app-name: creditor-incoming-payments-deployment
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -428,7 +428,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-format-validation:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-format-validation-config-map
@@ -476,7 +476,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-aml-check:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-aml-check-config-map
@@ -524,7 +524,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-fraud-check:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-fraud-check-config-map
@@ -572,7 +572,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-core-banking:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-core-banking-config-map
@@ -620,7 +620,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-send-payment:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-send-payment-config-map
@@ -668,7 +668,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/mock-rtp-network:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: mock-rtp-network-config-map
@@ -716,7 +716,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-payments-lifecycle:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-payments-lifecycle-config-map
@@ -744,30 +744,30 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: creditor-incoming-payments-network-deployment
+  name: creditor-incoming-payments-deployment
   labels:
-    app-name: creditor-incoming-payments-network
+    app-name: creditor-incoming-payments
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app-name: creditor-incoming-payments-network
+      app-name: creditor-incoming-payments
   template:
     metadata:
       labels:
-        app-name: creditor-incoming-payments-network
+        app-name: creditor-incoming-payments
     spec:
       securityContext:
         {}
       containers:
-        - name: creditor-incoming-payments-network
+        - name: creditor-incoming-payments
           securityContext:
             {}
-          image: sidgs001/creditor-incoming-payments-network:1.0.0
-          imagePullPolicy: IfNotPresent
+          image: sidgs001/creditor-incoming-payments:1.0.0
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: creditor-incoming-payments-network-config-map
+                name: creditor-incoming-payments-config-map
           ports:
             - name: http
               containerPort: 80
@@ -812,7 +812,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-payment-validation:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: creditor-payment-validation-config-map
@@ -860,7 +860,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-aml-check:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: creditor-aml-check-config-map
@@ -908,7 +908,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-payment-acknowledgement:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: creditor-payment-acknowledgement-config-map
@@ -956,7 +956,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-payments-confirmation:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-payments-confirmation-config-map
@@ -1004,7 +1004,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-payments-confirmation:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: creditor-payments-confirmation-config-map
