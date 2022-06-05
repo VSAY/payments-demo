@@ -15,8 +15,8 @@ export const SYSTEMUSERS: UserProfile[] = [
   },
   {
     id: '3', accountHolderId: '33333', title: '', firstName: 'Red', lastName: 'Hat', address1: '100 East Davie Street', address2: '',
-    city: 'Raleigh', state: 'NC', zipCode: '27601', workPhone: '1-800-733-4281', cellPhone: '',
-    email: 'customerservice@redhat.com', role: 'customerService'
+    city: 'Exton', state: 'PA', zipCode: '19426', workPhone: '1-800-733-4281', cellPhone: '',
+    email: 'customerservice@sidgs.com', role: 'customerService'
   },
   {
     id: '4', accountHolderId: '44444', title: '', firstName: 'Abraham', lastName: 'Lincoln', address1: '', address2: '',

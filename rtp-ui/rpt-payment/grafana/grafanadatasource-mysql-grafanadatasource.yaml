@@ -27,7 +27,7 @@ spec:
       secureJsonData:
         password: dbpass
       name: MYSQL
-      user: dbuser
+      user: root
       url: mysql-56-rhel7
       isDefault: true
       version: 1
