@@ -124,7 +124,7 @@ public class MessagesController {
 	}
 
 	@GetMapping("/accounts")
-	private Mono<ResponseEntity<OBReadAccount5>> getAccounts(
+	public Mono<ResponseEntity<OBReadAccount5>> getAccounts(
 			@RequestParam("accountHolderId") Optional<String> accountHolderId) {
 		OBReadAccount5 obReadAccount5 = new OBReadAccount5();
 		List<Account> accounts = new ArrayList<Account>();
@@ -148,7 +148,7 @@ public class MessagesController {
 	}
 
 	@GetMapping("/accounts/{accountId}")
-	private Mono<ResponseEntity<OBReadAccount5>> getAccountById(@PathVariable String accountId) {
+	public Mono<ResponseEntity<OBReadAccount5>> getAccountById(@PathVariable String accountId) {
 		OBReadAccount5 obReadAccount5 = new OBReadAccount5();
 
 		List<Account> accounts = (ArrayList<Account>) accountRepository.findByAccountId(accountId);
@@ -166,7 +166,7 @@ public class MessagesController {
 	}
 
 	@GetMapping("/accounts/{accountId}/balances")
-	private Mono<ResponseEntity<OBReadBalance1>> getAccountBalances(@PathVariable String accountId) {
+	public Mono<ResponseEntity<OBReadBalance1>> getAccountBalances(@PathVariable String accountId) {
 		OBReadBalance1 obReadBalance1 = new OBReadBalance1();
 
 		List<Account> accounts = (ArrayList<Account>) accountRepository.findByAccountId(accountId);
@@ -193,8 +193,18 @@ public class MessagesController {
 		return Mono.just(ResponseEntity.ok().header("Access-Control-Allow-Origin", "*").body(obReadBalance1));
 	}
 
+	@GetMapping("/ping")
+	public String sayHello1() {
+		return "Hi /ping!";
+	}
+
+	@GetMapping("/accounts/ping")
+	public String sayHello() {
+		return "Hi /accounts/ping!";
+	}
+
 	@GetMapping("/accounts/{accountId}/transactions")
-	private Mono<ResponseEntity<OBReadTransaction6>> getAccountTransactions(@PathVariable String accountId) {
+	public Mono<ResponseEntity<OBReadTransaction6>> getAccountTransactions(@PathVariable String accountId) {
 		OBReadTransaction6 obReadTransaction6 = new OBReadTransaction6();
 
 		List<Account> accounts = accountRepository.findByAccountId(accountId);
