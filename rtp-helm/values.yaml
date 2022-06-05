@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: nginx
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -101,6 +101,8 @@ rtp_services:
       DATABASE_URL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true" 
       DATABASE_USER: root 
       DATABASE_PASS: dbpass
+      SPRING_JPA_HIBERNATE_DDLAUTO: update
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
   - name : debtor-format-validation 
     image: sidgs001/debtor-format-validation:1.0.0
     port: 8080

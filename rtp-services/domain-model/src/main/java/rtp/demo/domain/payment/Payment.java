@@ -20,7 +20,7 @@ public class Payment implements Serializable {
 
 	private static final long serialVersionUID = 6320977454651634641L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", updatable = false, unique = true)
 	private BigInteger id;
 	@Column(name = "DOMESTIC_PAYMENT_ID", unique = true, nullable = true, length = 256)

@@ -21,6 +21,8 @@ data:
     PRODUCER_TOPIC: debtor-incoming-payments
     SECURITY_PROTOCOL: PLAINTEXT
     SERIALIZER_CLASS: rtp.demo.domain.payment.serde.PaymentSerializer
+    SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    SPRING_JPA_HIBERNATE_DDLAUTO: update
 ---
 # Source: rtp-helm/templates/config-map-list.yaml
 apiVersion: v1
@@ -217,9 +219,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: rtp-ui
 ---
@@ -234,9 +236,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: debtor-payments-service
 ---
@@ -251,9 +253,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: debtor-format-validation
 ---
@@ -268,9 +270,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: debtor-aml-check
 ---
@@ -285,9 +287,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: debtor-fraud-check
 ---
@@ -302,9 +304,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: debtor-core-banking
 ---
@@ -319,9 +321,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: debtor-send-payment
 ---
@@ -336,9 +338,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: mock-rtp-network
 ---
@@ -353,9 +355,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: debtor-payments-lifecycle
 ---
@@ -370,9 +372,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: creditor-incoming-payments-network
 ---
@@ -387,9 +389,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: creditor-payment-validation
 ---
@@ -404,9 +406,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: creditor-aml-check
 ---
@@ -421,9 +423,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: creditor-payment-acknowledgement
 ---
@@ -438,9 +440,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: debtor-payments-confirmation
 ---
@@ -455,9 +457,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 8080
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
-      name: http
+      name: "8080"
   selector:
     app-name: creditor-payments-confirmation
 ---
@@ -485,7 +487,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/rtp-ui:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: rtp-ui-config-map
@@ -533,7 +535,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-payments-service:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-payments-service-config-map
@@ -581,7 +583,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-format-validation:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-format-validation-config-map
@@ -629,7 +631,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-aml-check:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-aml-check-config-map
@@ -677,7 +679,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-fraud-check:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-fraud-check-config-map
@@ -725,7 +727,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-core-banking:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-core-banking-config-map
@@ -773,7 +775,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-send-payment:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-send-payment-config-map
@@ -821,7 +823,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/mock-rtp-network:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: mock-rtp-network-config-map
@@ -869,7 +871,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-payments-lifecycle:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-payments-lifecycle-config-map
@@ -917,7 +919,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-incoming-payments-network:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: creditor-incoming-payments-network-config-map
@@ -965,7 +967,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-payment-validation:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: creditor-payment-validation-config-map
@@ -1013,7 +1015,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-aml-check:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: creditor-aml-check-config-map
@@ -1061,7 +1063,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-payment-acknowledgement:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: creditor-payment-acknowledgement-config-map
@@ -1109,7 +1111,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-payments-confirmation:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: debtor-payments-confirmation-config-map
@@ -1157,7 +1159,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-payments-confirmation:1.0.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: creditor-payments-confirmation-config-map

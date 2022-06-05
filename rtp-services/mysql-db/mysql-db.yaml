@@ -10,7 +10,6 @@ metadata:
     helm.sh/chart: mysql-8.8.26
     app.kubernetes.io/instance: my-release
     app.kubernetes.io/managed-by: Helm
-  annotations:
 secrets:
   - name: mysql-56-rhel7
 ---
