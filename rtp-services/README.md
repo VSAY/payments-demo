@@ -12,6 +12,7 @@ Clone or download this git repository to a local working space. The below instru
 Logged in as a user logged in to K8 with cluster-admin permissions, create a new namespace for the demo project:
 ```
 kubectl create ns rtp-demo
+kubectl label namespace rtp-demo istio-injection=enabled
 ```
 
 ### AMQ Streams
@@ -133,11 +134,11 @@ kubectl apply -f ./sample-rtp-k8-app.yaml -n rtp-demo
 
 This project implements the below Open Banking Payments and Accounts API methods. The official documentation can be found here:
 
-https://openbankinguk.github.io/read-write-api-site3/v3.1.6/resources-and-data-models/aisp/Accounts.html
-https://openbankinguk.github.io/read-write-api-site3/v3.1.6/resources-and-data-models/aisp/Balances.html
-https://openbankinguk.github.io/read-write-api-site3/v3.1.6/resources-and-data-models/aisp/Transactions.html
-https://openbankinguk.github.io/read-write-api-site3/v3.1.6/resources-and-data-models/pisp/domestic-payments.html
-https://github.com/OpenBankingUK/read-write-api-specs
+- https://openbankinguk.github.io/read-write-api-site3/v3.1.6/resources-and-data-models/aisp/Accounts.html
+- https://openbankinguk.github.io/read-write-api-site3/v3.1.6/resources-and-data-models/aisp/Balances.html
+- https://openbankinguk.github.io/read-write-api-site3/v3.1.6/resources-and-data-models/aisp/Transactions.html
+- https://openbankinguk.github.io/read-write-api-site3/v3.1.6/resources-and-data-models/pisp/domestic-payments.html
+- https://github.com/OpenBankingUK/read-write-api-specs
 
 ### GET /accounts
 

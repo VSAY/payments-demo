@@ -3,6 +3,29 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: rtp-ui-config-map
+data:
+    null
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debtor-payment-service-config-map
+data:
+    ACKS: "1"
+    BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+    DATABASE_PASS: dbpass
+    DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true
+    DATABASE_USER: root
+    PRODUCER_TOPIC: debtor-incoming-payments
+    SECURITY_PROTOCOL: PLAINTEXT
+    SERIALIZER_CLASS: rtp.demo.domain.payment.serde.PaymentSerializer
+---
+# Source: rtp-helm/templates/config-map-list.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
   name: debtor-format-validation-config-map
 data:
     BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
@@ -103,7 +126,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: creditor-incoming-payments-config-map
+  name: creditor-incoming-payments-network-config-map
 data:
     BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
     CONSUMER_COUNT: "1"
@@ -187,6 +210,40 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
+  name: rtp-ui-service
+  labels:
+    app-name: rtp-ui-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: rtp-ui
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: debtor-payment-service-service
+  labels:
+    app-name: debtor-payment-service-deployment 
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app-name: debtor-payment-service
+---
+# Source: rtp-helm/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
   name: debtor-format-validation-service
   labels:
     app-name: debtor-format-validation-deployment 
@@ -198,7 +255,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: debtor-format-validation-deployment
+    app-name: debtor-format-validation
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -215,7 +272,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: debtor-aml-check-deployment
+    app-name: debtor-aml-check
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -232,7 +289,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: debtor-fraud-check-deployment
+    app-name: debtor-fraud-check
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -249,7 +306,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: debtor-core-banking-deployment
+    app-name: debtor-core-banking
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -266,7 +323,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: debtor-send-payment-deployment
+    app-name: debtor-send-payment
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -283,7 +340,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: mock-rtp-network-deployment
+    app-name: mock-rtp-network
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -300,15 +357,15 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: debtor-payments-lifecycle-deployment
+    app-name: debtor-payments-lifecycle
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: creditor-incoming-payments-service
+  name: creditor-incoming-payments-network-service
   labels:
-    app-name: creditor-incoming-payments-deployment 
+    app-name: creditor-incoming-payments-network-deployment 
 spec:
   type: ClusterIP
   ports:
@@ -317,7 +374,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: creditor-incoming-payments-deployment
+    app-name: creditor-incoming-payments-network
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -334,7 +391,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: creditor-payment-validation-deployment
+    app-name: creditor-payment-validation
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -351,7 +408,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: creditor-aml-check-deployment
+    app-name: creditor-aml-check
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -368,7 +425,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: creditor-payment-acknowledgement-deployment
+    app-name: creditor-payment-acknowledgement
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -385,7 +442,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: debtor-payments-confirmation-deployment
+    app-name: debtor-payments-confirmation
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -402,7 +459,103 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: creditor-payments-confirmation-deployment
+    app-name: creditor-payments-confirmation
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rtp-ui-deployment
+  labels:
+    app-name: rtp-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: rtp-ui
+  template:
+    metadata:
+      labels:
+        app-name: rtp-ui
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: rtp-ui
+          securityContext:
+            {}
+          image: sidgs001/rtp-ui:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: rtp-ui-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+---
+# Source: rtp-helm/templates/deployment-list.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debtor-payment-service-deployment
+  labels:
+    app-name: debtor-payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-name: debtor-payment-service
+  template:
+    metadata:
+      labels:
+        app-name: debtor-payment-service
+    spec:
+      securityContext:
+        {}
+      containers:
+        - name: debtor-payment-service
+          securityContext:
+            {}
+          image: sidgs001/debtor-payment-service:1.0.0
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: debtor-payment-service-config-map
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 512Mi
 ---
 # Source: rtp-helm/templates/deployment-list.yaml
 apiVersion: apps/v1
@@ -428,7 +581,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-format-validation:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: debtor-format-validation-config-map
@@ -476,7 +629,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-aml-check:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: debtor-aml-check-config-map
@@ -524,7 +677,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-fraud-check:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: debtor-fraud-check-config-map
@@ -572,7 +725,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-core-banking:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: debtor-core-banking-config-map
@@ -620,7 +773,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-send-payment:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: debtor-send-payment-config-map
@@ -668,7 +821,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/mock-rtp-network:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: mock-rtp-network-config-map
@@ -716,7 +869,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-payments-lifecycle:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: debtor-payments-lifecycle-config-map
@@ -744,30 +897,30 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: creditor-incoming-payments-deployment
+  name: creditor-incoming-payments-network-deployment
   labels:
-    app-name: creditor-incoming-payments
+    app-name: creditor-incoming-payments-network
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app-name: creditor-incoming-payments
+      app-name: creditor-incoming-payments-network
   template:
     metadata:
       labels:
-        app-name: creditor-incoming-payments
+        app-name: creditor-incoming-payments-network
     spec:
       securityContext:
         {}
       containers:
-        - name: creditor-incoming-payments
+        - name: creditor-incoming-payments-network
           securityContext:
             {}
-          image: sidgs001/creditor-incoming-payments:1.0.0
-          imagePullPolicy: Always
+          image: sidgs001/creditor-incoming-payments-network:1.0.0
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-                name: creditor-incoming-payments-config-map
+                name: creditor-incoming-payments-network-config-map
           ports:
             - name: http
               containerPort: 80
@@ -812,7 +965,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-payment-validation:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: creditor-payment-validation-config-map
@@ -860,7 +1013,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-aml-check:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: creditor-aml-check-config-map
@@ -908,7 +1061,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-payment-acknowledgement:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: creditor-payment-acknowledgement-config-map
@@ -956,7 +1109,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/debtor-payments-confirmation:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: debtor-payments-confirmation-config-map
@@ -1004,7 +1157,7 @@ spec:
           securityContext:
             {}
           image: sidgs001/creditor-payments-confirmation:1.0.0
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
                 name: creditor-payments-confirmation-config-map
@@ -1027,3 +1180,40 @@ spec:
             requests:
               cpu: 200m
               memory: 512Mi
+---
+# Source: rtp-helm/templates/gateway.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: rtp-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http-wildcard
+        protocol: HTTP
+      
+      hosts:
+        - sam-rtp-sandbox.demo.sidglobal.cloud
+---
+# Source: rtp-helm/templates/gateway.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: rtp-virtualservice
+spec:
+  hosts:
+    - sam-rtp-sandbox.demo.sidglobal.cloud
+  gateways:
+    - rtp-gateway
+  http:
+      - match:
+        - uri:
+            prefix: /
+        route:
+          - destination:
+              port:
+                number: 8080
+              host: rtp-ui-service

@@ -78,7 +78,29 @@ tolerations: []
 
 affinity: {}
 
+gateway: 
+  enabled : true
+  domain: sam-rtp-sandbox.demo.sidglobal.cloud
+  secure: 
+    enabled : false
+
 rtp_services: 
+
+  - name : rtp-ui
+    image: sidgs001/rtp-ui:1.0.0
+    port: 8080
+  - name : debtor-payment-service 
+    image: sidgs001/debtor-payment-service:1.0.0
+    port: 8080
+    properties: 
+      BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
+      PRODUCER_TOPIC: debtor-incoming-payments 
+      SECURITY_PROTOCOL: PLAINTEXT 
+      SERIALIZER_CLASS: rtp.demo.domain.payment.serde.PaymentSerializer 
+      ACKS: "1" 
+      DATABASE_URL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true" 
+      DATABASE_USER: root 
+      DATABASE_PASS: dbpass
   - name : debtor-format-validation 
     image: sidgs001/debtor-format-validation:1.0.0
     port: 8080
@@ -100,7 +122,6 @@ rtp_services:
       CONSUMER_COUNT: "1" 
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: debtor-aml-check
-
   - name: debtor-fraud-check
     properties: 
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
@@ -110,7 +131,6 @@ rtp_services:
       CONSUMER_COUNT: "1" 
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: debtor-fraud-check
-
   - name: debtor-core-banking
     properties: 
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
@@ -121,7 +141,6 @@ rtp_services:
       CONSUMER_COUNT: "1"
       CONSUMER_SEEK_TO: end
       CONSUMER_GROUP: debtor-core-banking
-
   - name: debtor-send-payment
     properties:  
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
@@ -131,7 +150,6 @@ rtp_services:
       CONSUMER_COUNT: "1" 
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: debtor-send-payment
-
   - name: mock-rtp-network
     properties:   
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
@@ -141,7 +159,6 @@ rtp_services:
       CONSUMER_COUNT: "1" 
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: mock-rtp-network
-
   - name: debtor-payments-lifecycle
     properties:  
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
@@ -150,9 +167,8 @@ rtp_services:
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: debtor-payments-lifecycle 
       DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true
-      DATABASE_USER: dbuser 
+      DATABASE_USER: root 
       DATABASE_PASS: dbpass
-
   - name: creditor-incoming-payments-network
     properties:  
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
@@ -162,7 +178,6 @@ rtp_services:
       CONSUMER_COUNT: "1" 
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: creditor-incoming-payments
-
   - name: creditor-payment-validation
     properties: 
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
@@ -172,7 +187,6 @@ rtp_services:
       CONSUMER_COUNT: "1" 
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: creditor-payment-validation
-
   - name: creditor-aml-check
     properties: 
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
@@ -182,7 +196,6 @@ rtp_services:
       CONSUMER_COUNT: "1" 
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: creditor-aml-check
-
   - name: creditor-payment-acknowledgement
     properties: 
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092

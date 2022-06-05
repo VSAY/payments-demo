@@ -14,7 +14,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: {{ .name }}-deployment 
+    app-name: {{ .name }} 
 
 ---
 {{- end }}

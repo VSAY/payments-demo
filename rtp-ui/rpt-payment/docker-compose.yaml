@@ -1,0 +1,10 @@
+
+version: '2'
+
+services:
+  rtp-ui:
+    build: ./
+    image: sidgs001/rtp-ui:1.0.0
+    ports:
+      - 80:80
+

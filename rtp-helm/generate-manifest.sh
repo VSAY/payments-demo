@@ -1,0 +1,1 @@
+helm template . -n rtp-demo > sample/sample-rtp-k8-app.yaml 

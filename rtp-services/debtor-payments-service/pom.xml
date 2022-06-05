@@ -26,7 +26,7 @@
     <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
     <spring-boot-bom.version>2.1.6.Final</spring-boot-bom.version>
 
-    <docker.registry>865615422972.dkr.ecr.us-east-1.amazonaws.com</docker.registry>
+    <docker.registry>sidgs001</docker.registry>
     <spring.profile>aws</spring.profile>
     <docker.base.image>openjdk:11.0.6-jdk-stretch</docker.base.image>
     <app.profile>aws</app.profile>

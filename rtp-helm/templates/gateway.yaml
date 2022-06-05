@@ -1,0 +1,46 @@
+{{- if .Values.gateway.enabled -}}
+
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: rtp-gateway
+spec:
+  selector:
+    istio: {{ .Values.gateway.ingressgateway | default "ingressgateway" }}
+  servers:
+    - port:
+        number: {{ .Values.gateway.port_number | default 80 }}
+        name: http-wildcard
+        protocol: {{ .Values.gateway.protocol | default "HTTP" }}
+      {{ if .Values.gateway.secure.enabled }}
+      tls:
+        mode: SIMPLE
+        credentialName: {{ .Values.gateway.secure.credentialName | default "rtp-tls-credential" }}  # must be the same as secret
+      {{ end }}
+      hosts:
+        - {{ .Values.gateway.domain | default "rtp-ui.localhost" }}
+
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: rtp-virtualservice
+spec:
+  hosts:
+    - {{ .Values.gateway.domain | default "rtp-ui.localhost" }}
+  gateways:
+    - rtp-gateway
+  http:
+      - match:
+        - uri:
+            prefix: /
+        route:
+          - destination:
+              port:
+                number: 8080
+              host: rtp-ui-service
+
+
+
+{{- end -}}
