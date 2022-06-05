@@ -11,7 +11,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: debtor-payment-service-config-map
+  name: debtor-payments-service-config-map
 data:
     ACKS: "1"
     BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
@@ -227,9 +227,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: debtor-payment-service-service
+  name: debtor-payments-service-service
   labels:
-    app-name: debtor-payment-service-deployment 
+    app-name: debtor-payments-service-deployment 
 spec:
   type: ClusterIP
   ports:
@@ -238,7 +238,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app-name: debtor-payment-service
+    app-name: debtor-payments-service
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -513,30 +513,30 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: debtor-payment-service-deployment
+  name: debtor-payments-service-deployment
   labels:
-    app-name: debtor-payment-service
+    app-name: debtor-payments-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app-name: debtor-payment-service
+      app-name: debtor-payments-service
   template:
     metadata:
       labels:
-        app-name: debtor-payment-service
+        app-name: debtor-payments-service
     spec:
       securityContext:
         {}
       containers:
-        - name: debtor-payment-service
+        - name: debtor-payments-service
           securityContext:
             {}
-          image: sidgs001/debtor-payment-service:1.0.0
+          image: sidgs001/debtor-payments-service:1.0.0
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-                name: debtor-payment-service-config-map
+                name: debtor-payments-service-config-map
           ports:
             - name: http
               containerPort: 80

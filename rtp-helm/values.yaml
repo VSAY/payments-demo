@@ -89,8 +89,8 @@ rtp_services:
   - name : rtp-ui
     image: sidgs001/rtp-ui:1.0.0
     port: 8080
-  - name : debtor-payment-service 
-    image: sidgs001/debtor-payment-service:1.0.0
+  - name : debtor-payments-service 
+    image: sidgs001/debtor-payments-service:1.0.0
     port: 8080
     properties: 
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092

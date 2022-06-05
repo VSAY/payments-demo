@@ -13,15 +13,18 @@
         <artifactId>rtp-parent</artifactId>
         <version>1.0.0</version>
         <relativePath>../</relativePath>
-      </parent>
+    </parent>
 
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <spring-boot.version>1.5.13.RELEASE</spring-boot.version>
+<!--        <spring-boot.version>2.1.6.RELEASE</spring-boot.version>-->
         <camel.version>2.21.2</camel.version>
+        <spring-boot.version>2.1.6.RELEASE</spring-boot.version>
+        <spring-boot-bom.version>2.1.6.Final</spring-boot-bom.version>
+
 
         <!-- versions of Maven plugins -->
         <fabric8.maven.plugin.version>3.5.40</fabric8.maven.plugin.version>
@@ -59,29 +62,29 @@
     </dependencyManagement>
 
 
-   	<dependencies>
+    <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
-            <dependency>
-                <groupId>org.example</groupId>
-                <artifactId>domain-model</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-<dependency>
-  <groupId>org.apache.camel</groupId>
-  <artifactId>camel-core</artifactId>
-</dependency>
-<dependency>
-  <groupId>org.apache.camel</groupId>
-  <artifactId>camel-kafka</artifactId>
-</dependency>
-<dependency>
-  <groupId>org.apache.camel</groupId>
-  <artifactId>camel-stream</artifactId>
-</dependency>
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>domain-model</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-stream</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring-boot-starter</artifactId>
