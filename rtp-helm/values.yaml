@@ -95,7 +95,7 @@ rtp_services:
     properties: 
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
       PRODUCER_TOPIC: debtor-incoming-payments 
-      SECURITY_PROTOCOL: PLAINTEXT 
+      SECURITY_PROTOCOL: PLAINTEXT
       SERIALIZER_CLASS: rtp.demo.domain.payment.serde.PaymentSerializer 
       ACKS: "1" 
       DATABASE_URL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true" 

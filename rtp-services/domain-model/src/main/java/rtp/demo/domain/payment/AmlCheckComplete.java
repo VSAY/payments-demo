@@ -20,7 +20,7 @@ public class AmlCheckComplete implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", updatable = false, unique = true)
+	@Column(name = "ID", updatable = false, unique = true, columnDefinition = "bigint")
 	private BigInteger id;
 	@Column(name = "DOMESTIC_PAYMENT_ID", unique = true, nullable = true, length = 256)
 	private String domesticPaymentId;

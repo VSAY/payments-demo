@@ -22,7 +22,7 @@ public class Account implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", updatable = false, unique = true)
+	@Column(name = "ID", updatable = false, unique = true, columnDefinition = "bigint")
 	private BigInteger id;
 	@Column(name = "ACCOUNT_ID", unique = true, nullable = true, length = 256)
 	String accountId;
