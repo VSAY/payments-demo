@@ -20,8 +20,11 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ac
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
+@EnableSwagger2
+
 @EnableJpaRepositories("rtp.demo.payment.repository")
 @ComponentScan(basePackages = { "rtp.demo.payment.repository", "rtp.demo.domain.payment", "rtp.demo.domain.account",
 		"rtp.demo.debtor.payment", "io.swagger", "rtp.demo.domain", "io.swagger.configuration" })

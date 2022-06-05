@@ -28,8 +28,8 @@ export class AccountInfoService {
   public next = '';
   public last = '';
   private userId: string;
-  private bankUrl = '/ui/';
-  private backEndUrl = '/';
+  private bankUrl = '/api/';
+  private backEndUrl = '/api/';
   // httpOptions.headers =  httpOptions.headers.set('Authorization', 'my-new-auth-token');
 constructor(private http: HttpClient) { }
 
