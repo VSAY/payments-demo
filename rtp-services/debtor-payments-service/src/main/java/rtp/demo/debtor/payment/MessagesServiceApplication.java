@@ -5,10 +5,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import reactor.core.publisher.Mono;
 import rtp.demo.payment.repository.PaymentRepository;
 
@@ -20,7 +25,37 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ac
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import springfox.documentation.RequestHandler;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.ModelRef;
+import springfox.documentation.schema.WildcardType;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.Tag;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.web.DocExpansion;
+import springfox.documentation.swagger.web.ModelRendering;
+import springfox.documentation.swagger.web.OperationsSorter;
+import springfox.documentation.swagger.web.SecurityConfiguration;
+import springfox.documentation.swagger.web.SecurityConfigurationBuilder;
+import springfox.documentation.swagger.web.TagsSorter;
+import springfox.documentation.swagger.web.UiConfiguration;
+import springfox.documentation.swagger.web.UiConfigurationBuilder;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.time.LocalDate;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -51,5 +86,24 @@ public class MessagesServiceApplication {
 		}
 		return accepted().contentType(APPLICATION_JSON).body(messageMono, Message.class);
 	}
+//	@Bean
+//	UiConfiguration uiConfig() {
+//		return UiConfigurationBuilder.builder()
+//				.deepLinking(true)
+//				.displayOperationId(false)
+//				.defaultModelsExpandDepth(1)
+//				.defaultModelExpandDepth(1)
+//				.defaultModelRendering(ModelRendering.EXAMPLE)
+//				.displayRequestDuration(false)
+//				.docExpansion(DocExpansion.NONE)
+//				.filter(false)
+//				.maxDisplayedTags(null)
+//				.operationsSorter(OperationsSorter.ALPHA)
+//				.showExtensions(false)
+//				.tagsSorter(TagsSorter.ALPHA)
+//				.supportedSubmitMethods(UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS)
+//				.validatorUrl(null)
+//				.build();
+//	}
 
 }

@@ -15,9 +15,12 @@ metadata:
 data:
     ACKS: "1"
     BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
-    DATABASE_PASS: dbpass
-    DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false
-    DATABASE_USER: root
+    DATABASE_PASS: Sidgs123+
+    DATABASE_PASS_MYSQL: dbpass
+    DATABASE_URL: jdbc:postgresql://sidgs-dev.cjip1jjvpzht.us-east-1.rds.amazonaws.com:5432/rtp-demo
+    DATABASE_URL_MYSQL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false
+    DATABASE_USER: postgres
+    DATABASE_USER_MYSQL: root
     PRODUCER_TOPIC: debtor-incoming-payments
     SECURITY_PROTOCOL: PLAINTEXT
     SERIALIZER_CLASS: rtp.demo.domain.payment.serde.PaymentSerializer
@@ -120,9 +123,12 @@ data:
     CONSUMER_GROUP: debtor-payments-lifecycle
     CONSUMER_MAX_POLL_RECORDS: "500"
     CONSUMER_SEEK_TO: end
-    DATABASE_PASS: dbpass
-    DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false
-    DATABASE_USER: root
+    DATABASE_PASS: Sidgs123+
+    DATABASE_PASS_MYSQL: dbpass
+    DATABASE_URL: jdbc:postgresql://sidgs-dev.cjip1jjvpzht.us-east-1.rds.amazonaws.com:5432/rtp-demo
+    DATABASE_URL_MYSQL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false
+    DATABASE_USER: postgres
+    DATABASE_USER_MYSQL: root
 ---
 # Source: rtp-helm/templates/config-map-list.yaml
 apiVersion: v1
