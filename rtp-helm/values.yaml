@@ -98,9 +98,12 @@ rtp_services:
       SECURITY_PROTOCOL: PLAINTEXT
       SERIALIZER_CLASS: rtp.demo.domain.payment.serde.PaymentSerializer 
       ACKS: "1" 
-      DATABASE_URL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false"
-      DATABASE_USER: root 
-      DATABASE_PASS: dbpass
+      DATABASE_URL: "jdbc:postgresql://sidgs-dev.cjip1jjvpzht.us-east-1.rds.amazonaws.com:5432/rtp-demo"
+      DATABASE_USER: postgres 
+      DATABASE_PASS: Sidgs123+
+      DATABASE_URL_MYSQL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false"
+      DATABASE_USER_MYSQL: root 
+      DATABASE_PASS_MYSQL: dbpass
       SPRING_JPA_HIBERNATE_DDLAUTO: update
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
   - name : debtor-format-validation 
@@ -168,9 +171,12 @@ rtp_services:
       CONSUMER_COUNT: "1" 
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: debtor-payments-lifecycle 
-      DATABASE_URL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false"
-      DATABASE_USER: root 
-      DATABASE_PASS: dbpass
+      DATABASE_URL_MYSQL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false"
+      DATABASE_USER_MYSQL: root 
+      DATABASE_PASS_MYSQL: dbpass
+      DATABASE_URL: "jdbc:postgresql://sidgs-dev.cjip1jjvpzht.us-east-1.rds.amazonaws.com:5432/rtp-demo"
+      DATABASE_USER: postgres 
+      DATABASE_PASS: Sidgs123+
   - name: creditor-incoming-payments-network
     properties:  
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
