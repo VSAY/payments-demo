@@ -98,7 +98,7 @@ rtp_services:
       SECURITY_PROTOCOL: PLAINTEXT
       SERIALIZER_CLASS: rtp.demo.domain.payment.serde.PaymentSerializer 
       ACKS: "1" 
-      DATABASE_URL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true" 
+      DATABASE_URL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false"
       DATABASE_USER: root 
       DATABASE_PASS: dbpass
       SPRING_JPA_HIBERNATE_DDLAUTO: update
@@ -168,7 +168,7 @@ rtp_services:
       CONSUMER_COUNT: "1" 
       CONSUMER_SEEK_TO: end 
       CONSUMER_GROUP: debtor-payments-lifecycle 
-      DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true
+      DATABASE_URL: "jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false"
       DATABASE_USER: root 
       DATABASE_PASS: dbpass
   - name: creditor-incoming-payments-network

@@ -16,7 +16,7 @@ data:
     ACKS: "1"
     BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
     DATABASE_PASS: dbpass
-    DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true
+    DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false
     DATABASE_USER: root
     PRODUCER_TOPIC: debtor-incoming-payments
     SECURITY_PROTOCOL: PLAINTEXT
@@ -121,7 +121,7 @@ data:
     CONSUMER_MAX_POLL_RECORDS: "500"
     CONSUMER_SEEK_TO: end
     DATABASE_PASS: dbpass
-    DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true
+    DATABASE_URL: jdbc:mysql://mysql-56-rhel7:3306/rtpdb?autoReconnect=true&useSSL=false
     DATABASE_USER: root
 ---
 # Source: rtp-helm/templates/config-map-list.yaml
