@@ -134,7 +134,7 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: creditor-incoming-payments-network-config-map
+  name: creditor-incoming-payments-config-map
 data:
     BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092
     CONSUMER_COUNT: "1"
@@ -371,9 +371,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: creditor-incoming-payments-network-service
+  name: creditor-incoming-payments-service
   labels:
-    app-name: creditor-incoming-payments-network-deployment 
+    app-name: creditor-incoming-payments-deployment 
 spec:
   type: ClusterIP
   ports:
@@ -382,7 +382,7 @@ spec:
       protocol: TCP
       name: "8080"
   selector:
-    app-name: creditor-incoming-payments-network
+    app-name: creditor-incoming-payments
 ---
 # Source: rtp-helm/templates/service.yaml
 apiVersion: v1
@@ -905,30 +905,30 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: creditor-incoming-payments-network-deployment
+  name: creditor-incoming-payments-deployment
   labels:
-    app-name: creditor-incoming-payments-network
+    app-name: creditor-incoming-payments
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app-name: creditor-incoming-payments-network
+      app-name: creditor-incoming-payments
   template:
     metadata:
       labels:
-        app-name: creditor-incoming-payments-network
+        app-name: creditor-incoming-payments
     spec:
       securityContext:
         {}
       containers:
-        - name: creditor-incoming-payments-network
+        - name: creditor-incoming-payments
           securityContext:
             {}
-          image: sidgs001/creditor-incoming-payments-network:1.0.0
+          image: sidgs001/creditor-incoming-payments:1.0.0
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
-                name: creditor-incoming-payments-network-config-map
+                name: creditor-incoming-payments-config-map
           ports:
             - name: http
               containerPort: 80

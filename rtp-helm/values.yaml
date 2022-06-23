@@ -177,7 +177,7 @@ rtp_services:
       DATABASE_URL: "jdbc:postgresql://sidgs-dev.cjip1jjvpzht.us-east-1.rds.amazonaws.com:5432/rtp-demo"
       DATABASE_USER: postgres 
       DATABASE_PASS: Sidgs123+
-  - name: creditor-incoming-payments-network
+  - name: creditor-incoming-payments
     properties:  
       BOOTSTRAP_SERVERS: rtp-demo-cluster-kafka-bootstrap:9092 
       CONSUMER_TOPIC: mock-rtp-creditor-incoming 
